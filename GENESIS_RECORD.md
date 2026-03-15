@@ -19,4 +19,4 @@ Date: Feb 2026
 Contribution:  Originator — complete specification
 
 
-Every new entry is a new block in TRION's history.
+Every new entry is a new block in TRION's history
