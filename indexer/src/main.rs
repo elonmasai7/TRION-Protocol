@@ -138,7 +138,7 @@ fn build_metrics(
 
 async fn publish_metrics(client: &Client, metrics: &BehavioralMetrics) -> Result<()> {
     let payload = serde_json::to_vec(metrics)?;
-    client.publish("behavior.metrics".into(), payload.into()).await?;
+    client.publish("behavior.metrics", payload).await?;
     Ok(())
 }
 

@@ -93,19 +93,19 @@ async fn init_db(client: &tokio_postgres::Client) -> Result<()> {
         .await?;
     client
         .execute(
-            \"ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ\",
+            "ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ",
             &[],
         )
         .await?;
     client
         .execute(
-            \"ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS tx_hash TEXT\",
+            "ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS tx_hash TEXT",
             &[],
         )
         .await?;
     client
         .execute(
-            \"ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS error TEXT\",
+            "ALTER TABLE trion_evm_outbox ADD COLUMN IF NOT EXISTS error TEXT",
             &[],
         )
         .await?;
