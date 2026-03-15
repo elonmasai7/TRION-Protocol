@@ -1,0 +1,20 @@
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+license = "CC0-1.0"
+
+[dependencies]
+anyhow = { workspace = true }
+async-nats = { workspace = true }
+axum = { workspace = true }
+chrono = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+tokio-postgres = { version = "0.7", features = ["with-chrono-0_4"] }
+trion = { path = "../trion" }
+futures-util = { workspace = true }

@@ -28,3 +28,22 @@ License
 CC0. The knowledge belongs to everyone.
 The canonical implementation is TRION Protocol, originated by Hudu Yusuf (Analys).
 Anyone building from this specification is building a derivative.
+
+---
+
+Level-0 Prototype (Code)
+
+This repository now includes a Level-0 prototype implementation with modular services:
+- Rust indexer, manipulation detector, signal engine, signal publisher, and API
+- Solidity registries and Vyper validator staking/slashing
+- Docker Compose stack for local orchestration
+
+Quickstart (local)
+1. `docker compose -f docker/docker-compose.yml up --build`
+2. `GET http://localhost:8080/signal/{asset}`
+
+Docs
+- docs/overview.md
+- docs/signal-spec.md
+- docs/integration-guide.md
+- docs/consumer-examples.md

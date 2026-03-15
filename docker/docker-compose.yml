@@ -1,0 +1,98 @@
+version: "3.9"
+services:
+  nats:
+    image: nats:2.10
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+  postgres:
+    image: timescale/timescaledb:latest-pg14
+    environment:
+      POSTGRES_USER: trion
+      POSTGRES_PASSWORD: trion
+      POSTGRES_DB: trion
+    ports:
+      - "5432:5432"
+    volumes:
+      - trion_pg:/var/lib/postgresql/data
+
+  neo4j:
+    image: neo4j:5
+    environment:
+      NEO4J_AUTH: neo4j/trion
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - trion_neo:/data
+
+  indexer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.indexer
+    environment:
+      TRION_NATS_URL: nats://nats:4222
+    depends_on:
+      - nats
+      - postgres
+      - neo4j
+
+  manipulation-detector:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.manipulation-detector
+    environment:
+      TRION_NATS_URL: nats://nats:4222
+    depends_on:
+      - nats
+
+  signal-engine:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.signal-engine
+    environment:
+      TRION_NATS_URL: nats://nats:4222
+    depends_on:
+      - nats
+
+  signal-publisher:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.signal-publisher
+    environment:
+      TRION_NATS_URL: nats://nats:4222
+      TRION_POSTGRES_URL: postgres://trion:trion@postgres:5432/trion
+    depends_on:
+      - nats
+      - postgres
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    environment:
+      TRION_NATS_URL: nats://nats:4222
+      TRION_POSTGRES_URL: postgres://trion:trion@postgres:5432/trion
+      TRION_API_BIND: 0.0.0.0:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - nats
+      - postgres
+
+  relayer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.relayer
+    environment:
+      TRION_POSTGRES_URL: postgres://trion:trion@postgres:5432/trion
+      TRION_EVM_RPC: http://host.docker.internal:8545
+      TRION_EVM_PRIVATE_KEY: ${TRION_EVM_PRIVATE_KEY}
+      TRION_EVM_CHAIN_ID: 2000
+    depends_on:
+      - postgres
+
+volumes:
+  trion_pg:
+  trion_neo:
